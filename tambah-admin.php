@@ -39,25 +39,17 @@ if ($_SESSION['status_login'] != true) {
             <h3>Tambah Data Produk</h3>
             <div class="box">
                 <form action="" method="POST" enctype="multipart/form-data">
-                    <select class="input-control" name="kategori" required>
-                        <option value="">--Pilih--</option>
-                        <?php
-						$kategori = mysqli_query($conn, "SELECT * FROM tb_category ORDER BY category_id DESC");
-						while ($r = mysqli_fetch_array($kategori)) {
-						?>
-                        <option value="<?php echo $r['category_id'] ?>"><?php echo $r['category_name'] ?></option>
-                        <?php } ?>
-                    </select>
+                    <input type="text" name="nama" class="input-control" placeholder="Nama Lengkap" required>
+                    <input type="text" name="user" class="input-control" placeholder="Username" required>
+                    <input type="password" name="pass1" class="input-control" placeholder="Password" required>
+                    <input type="password" name="pass2" class="input-control" placeholder="Konfirmasi Password"
+                        required>
+                    <input type="text" name="hp" class="input-control" placeholder="Nomor HP" required>
+                    <input type="email" name="email" class="input-control" placeholder="Email" required>
+                    <input type="text" name="alamat" class="input-control" placeholder="Alamat" required>
+                    <input type="text" name="ig" class="input-control" placeholder="Instagram" required>
 
-                    <input type="text" name="nama" class="input-control" placeholder="Nama Produk" required>
-                    <input type="text" name="harga" class="input-control" placeholder="Harga" required>
-                    <input type="file" name="gambar" class="input-control" required>
-                    <textarea class="input-control" name="deskripsi" placeholder="Deskripsi"></textarea><br>
-                    <select class="input-control" name="status">
-                        <option value="">--Pilih--</option>
-                        <option value="1">Aktif</option>
-                        <option value="0">Tidak Aktif</option>
-                    </select>
+                    <br>
                     <input type="submit" name="submit" value="Submit" class="btn">
                 </form>
                 <?php
@@ -65,34 +57,21 @@ if ($_SESSION['status_login'] != true) {
 
 					// print_r($_FILES['gambar']);
 					// menampung inputan dari form
-					$kategori 	= $_POST['kategori'];
-					$nama 		= $_POST['nama'];
-					$harga 		= $_POST['harga'];
-					$deskripsi 	= $_POST['deskripsi'];
-					$status 	= $_POST['status'];
+					$nama 	= $_POST['nama'];
+					$user 		= $_POST['user'];
+					$hp 		= $_POST['hp'];
+					$email 	= $_POST['email'];
+					$alamat 	= $_POST['alamat'];
+                    $ig 	= $_POST['ig'];
 
-					// menampung data file yang diupload
-					$filename = $_FILES['gambar']['name'];
-					$tmp_name = $_FILES['gambar']['tmp_name'];
+                    $pass1 	= $_POST['pass1'];
+					$pass2 	= $_POST['pass2'];
 
-					$type1 = explode('.', $filename);
-					$type2 = $type1[1];
+					if ($pass2 != $pass1) {
+						echo '<script>alert("Konfirmasi Password tidak sesuai")</script>';
 
-					$newname = 'produk' . time() . '.' . $type2;
 
-					// menampung data format file yang diizinkan
-					$tipe_diizinkan = array('jpg', 'jpeg', 'png', 'gif');
-
-					// validasi format file
-					if (!in_array($type2, $tipe_diizinkan)) {
-						// jika format file tidak ada di dalam tipe diizinkan
-						echo '<script>alert("Format file tidak diizinkan")</scrtip>';
-					} else {
-						// jika format file sesuai dengan yang ada di dalam array tipe diizinkan
-						// proses upload file sekaligus insert ke database
-						move_uploaded_file($tmp_name, './produk/' . $newname);
-
-						$insert = mysqli_query($conn, "INSERT INTO tb_product VALUES (
+						$insert = mysqli_query($conn, "INSERT INTO tb_admin VALUES (
 										null,
 										'" . $kategori . "',
 										'" . $nama . "',
